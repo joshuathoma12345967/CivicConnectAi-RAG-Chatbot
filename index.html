@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- Explicit Content Security Policy allowing Render API and safe scripts -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; connect-src 'self' https://chatbot-backend-bbei.onrender.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;">
+
   <title>Greenburgh Town Chatbot</title>
 
   <!-- Marked.js CDN for Markdown parsing -->
@@ -104,16 +108,17 @@
   // YOUR LIVE RENDER BACKEND URL
   const API_URL = 'https://chatbot-backend-bbei.onrender.com/api/chat';
 
-  // Configure Marked to open links in a NEW TAB automatically
-  const renderer = new marked.Renderer();
-  renderer.link = function(href, title, text) {
-    const linkUrl = typeof href === 'object' ? href.href : href;
-    const linkText = typeof href === 'object' ? href.text : text;
-    return `<a href="${linkUrl}" target="_blank" rel="noopener noreferrer">${linkText}</a>`;
-  };
-  marked.setOptions({ renderer: renderer });
+  // Configure Marked if available
+  if (typeof marked !== 'undefined') {
+    const renderer = new marked.Renderer();
+    renderer.link = function(href, title, text) {
+      const linkUrl = typeof href === 'object' ? href.href : href;
+      const linkText = typeof href === 'object' ? href.text : text;
+      return `<a href="${linkUrl}" target="_blank" rel="noopener noreferrer">${linkText}</a>`;
+    };
+    marked.setOptions({ renderer: renderer });
+  }
 
-  // Helper function to fill input and trigger send on sample chip click
   function askSample(questionText) {
     const inputField = document.getElementById('userInput');
     inputField.value = questionText;
@@ -146,12 +151,16 @@
       const data = await response.json();
       const rawAnswer = data.answer || "No response received";
       
-      // Render raw Markdown into formatted HTML
-      loadingMessage.innerHTML = marked.parse(rawAnswer);
+      // Render formatted HTML or fallback to plain text
+      if (typeof marked !== 'undefined') {
+        loadingMessage.innerHTML = marked.parse(rawAnswer);
+      } else {
+        loadingMessage.innerText = rawAnswer;
+      }
 
     } catch (error) {
       console.error('Fetch error:', error);
-      loadingMessage.innerText = "Error: Couldn't connect to server. Check console for details.";
+      loadingMessage.innerText = "Error: Couldn't connect to server. Please try again in a few seconds.";
     }
 
     // Auto-scroll to bottom
@@ -163,7 +172,7 @@
     const msgDiv = document.createElement('div');
     msgDiv.classList.add('message', className);
 
-    if (isMarkdown) {
+    if (isMarkdown && typeof marked !== 'undefined') {
       msgDiv.innerHTML = marked.parse(content);
     } else {
       msgDiv.innerText = content;
