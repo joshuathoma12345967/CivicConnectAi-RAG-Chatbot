@@ -3,10 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
+  
   <!-- Explicit Content Security Policy allowing Render API and safe scripts -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; connect-src 'self' https://chatbot-backend-bbei.onrender.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;">
-
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; connect-src 'self' https://greenburgh-rag-backend.onrender.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;">
   <title>Greenburgh Town Chatbot</title>
 
@@ -16,15 +14,15 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background-color: #f4f6f8; display: flex; justify-content: center; align-items: center; height: 100vh; }
-
+    
     .chat-container { width: 100%; max-width: 480px; height: 85vh; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden; }
     .chat-header { background: #2563eb; color: white; padding: 16px; text-align: center; font-weight: bold; font-size: 1.1rem; }
-
+    
     .chat-box { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
     .message { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 0.95rem; line-height: 1.4; word-wrap: break-word; }
     .bot-message { background: #e5e7eb; color: #1f2937; align-self: flex-start; border-bottom-left-radius: 2px; }
     .user-message { background: #2563eb; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
-
+    
     /* Styles for Markdown elements inside bot messages */
     .bot-message p { margin-bottom: 8px; }
     .bot-message p:last-child { margin-bottom: 0; }
@@ -81,7 +79,7 @@
 
 <div class="chat-container">
   <div class="chat-header">🤖 Greenburgh AI Assistant</div>
-
+  
   <div class="chat-box" id="chatBox">
     <div class="message bot-message">Hello! Ask me anything about Greenburgh town services, departments, or guidelines!</div>
   </div>
@@ -107,7 +105,6 @@
 
 <script>
   // YOUR LIVE RENDER BACKEND URL
-const API_URL = 'https://greenburgh-rag-backend.onrender.com/api/chat';
   const API_URL = 'https://greenburgh-rag-backend.onrender.com/api/chat';
 
   // Configure Marked if available
@@ -152,7 +149,7 @@ const API_URL = 'https://greenburgh-rag-backend.onrender.com/api/chat';
 
       const data = await response.json();
       const rawAnswer = data.answer || "No response received";
-
+      
       // Render formatted HTML or fallback to plain text
       if (typeof marked !== 'undefined') {
         loadingMessage.innerHTML = marked.parse(rawAnswer);
