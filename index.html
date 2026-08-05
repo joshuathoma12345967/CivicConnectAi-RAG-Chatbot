@@ -6,7 +6,7 @@
   
   <!-- Explicit Content Security Policy allowing Render API and safe scripts -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; connect-src 'self' https://greenburgh-rag-backend.onrender.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;">
-  <title>Greenburgh Town Chatbot</title>
+  <title>Greenie - Greenburgh Town Chatbot</title>
 
   <!-- Marked.js CDN for Markdown parsing -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -78,10 +78,10 @@
 <body>
 
 <div class="chat-container">
-  <div class="chat-header">🤖 Greenburgh AI Assistant</div>
+  <div class="chat-header">🌲 Greenie</div>
   
   <div class="chat-box" id="chatBox">
-    <div class="message bot-message">Hello! Ask me anything about Greenburgh town services, departments, or guidelines!</div>
+    <div class="message bot-message">Hello! I'm Greenie. Ask me anything about Greenburgh town services, departments, or guidelines!</div>
   </div>
 
   <!-- Suggested Sample Questions Container -->
@@ -98,7 +98,7 @@
   </div>
 
   <div class="input-area">
-    <input type="text" id="userInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMessage()" />
+    <input type="text" id="userInput" placeholder="Ask Greenie a question..." onkeydown="if(event.key==='Enter') sendMessage()" />
     <button onclick="sendMessage()">Send</button>
   </div>
 </div>
