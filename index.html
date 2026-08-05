@@ -16,9 +16,9 @@
        Color & Variable definitions (Greenburgh Theme)
        ========================================= */
     :root {
-      --primary-dark-green: #14532d; /* Forest green */
+      --primary-dark-green: #14532d; /* Forest green header & buttons */
       --secondary-green: #16a34a;    /* Lighter accent green */
-      --bg-warm-white: #fdfcfb;      /* Softer background */
+      --bg-warm-white: #fdfcfb;      /* Softer page background */
       --chat-bubble-user: #16a34a;  /* User message background */
       --chat-bubble-bot: #ffffff;   /* Bot message background */
       --text-dark: #1f2937;
@@ -27,29 +27,23 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    
-    /* Warmer background for better contrast */
     body { background-color: var(--bg-warm-white); display: flex; justify-content: center; align-items: center; height: 100vh; color: var(--text-dark); }
     
-    /* Container styling */
     .chat-container { width: 100%; max-width: 480px; height: 85vh; background: #ffffff; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-color); }
     
     /* Header - Dark Green & White */
     .chat-header { background: var(--primary-dark-green); color: var(--text-light); padding: 18px; text-align: center; font-weight: bold; font-size: 1.25rem; letter-spacing: 0.5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     
-    /* Chat window area */
-    .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; background-color: #f9fafb; /* Slight tint inside chat area */ }
+    .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; background-color: #f9fafb; }
+    .message { max-width: 82%; padding: 12px 16px; border-radius: 14px; font-size: 0.95rem; line-height: 1.5; word-wrap: break-word; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
     
-    /* General message styling */
-    .message { max-width: 80%; padding: 12px 16px; border-radius: 14px; font-size: 0.95rem; line-height: 1.5; word-wrap: break-word; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    
-    /* Bot message (Left side) - White with dark text */
+    /* Bot message - White card with subtle border */
     .bot-message { background: var(--chat-bubble-bot); color: var(--text-dark); align-self: flex-start; border-top-left-radius: 2px; border: 1px solid #f0f0f0; }
     
-    /* User message (Right side) - Green with white text */
+    /* User message - Medium forest green */
     .user-message { background: var(--chat-bubble-user); color: var(--text-light); align-self: flex-end; border-top-right-radius: 2px; }
     
-    /* Markdown styling within bot responses */
+    /* Styles for Markdown elements inside bot messages */
     .bot-message p { margin-bottom: 8px; }
     .bot-message p:last-child { margin-bottom: 0; }
     .bot-message h3 { font-size: 1rem; margin-top: 10px; margin-bottom: 6px; color: var(--primary-dark-green); }
@@ -76,14 +70,13 @@
       gap: 8px;
       overflow-x: auto;
       padding-bottom: 6px;
-      scrollbar-width: thin; /* Firefox */
+      scrollbar-width: thin;
     }
-    /* Webkit scrollbar styling for suggestions */
     .suggestions-grid::-webkit-scrollbar { height: 4px; }
     .suggestions-grid::-webkit-scrollbar-track { background: transparent; }
     .suggestions-grid::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 2px; }
 
-    /* Sample query chips - Green & White */
+    /* Dark green outline chips */
     .suggestion-chip {
       background: #ffffff;
       border: 1px solid var(--primary-dark-green);
@@ -101,24 +94,22 @@
       color: #ffffff;
     }
 
-    /* Input area styling */
     .input-area { display: flex; padding: 16px; border-top: 1px solid var(--border-color); gap: 10px; background: #fff; }
-    input { flex: 1; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; outline: none; font-size: 1rem; transition: border-color 0.2s; }
+    input { flex: 1; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; outline: none; font-size: 0.95rem; transition: border-color 0.2s; }
     input:focus { border-color: var(--secondary-green); box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1); }
     
-    /* Modern send button */
-    button#sendBtn { padding: 12px 20px; background: var(--primary-dark-green); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.2s; }
-    button#sendBtn:hover { background: var(--secondary-green); }
+    button { padding: 12px 20px; background: var(--primary-dark-green); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: background 0.2s; }
+    button:hover { background: var(--secondary-green); }
   </style>
 </head>
 <body>
 
 <div class="chat-container">
-  <!-- Header: Now Greenie -->
+  <!-- Updated Header -->
   <div class="chat-header">🌲 Greenie</div>
   
   <div class="chat-box" id="chatBox">
-    <!-- Updated more inviting welcome message -->
+    <!-- Updated Inviting Welcome Message -->
     <div class="message bot-message">Hi there! I'm Greenie, your guide to Greenburgh. 🏛️<br><br>Ask me about sanitation schedules, town permits, parks, or where to find a department. How can I help you today?</div>
   </div>
 
@@ -137,8 +128,7 @@
 
   <div class="input-area">
     <input type="text" id="userInput" placeholder="Ask Greenie a question..." onkeydown="if(event.key==='Enter') sendMessage()" />
-    <!-- Updated send button to modern arrow symbol -->
-    <button id="sendBtn" onclick="sendMessage()">→</button>
+    <button onclick="sendMessage()">→</button>
   </div>
 </div>
 
@@ -187,11 +177,11 @@
       });
 
       if (!response.ok) {
-         throw new Error('Network response was not ok');
+        throw new Error(`Server returned status: ${response.status}`);
       }
 
       const data = await response.json();
-      const rawAnswer = data.answer || "Sorry, I didn't get a response.";
+      const rawAnswer = data.answer || "No response received";
       
       // Render formatted HTML or fallback to plain text
       if (typeof marked !== 'undefined') {
@@ -202,7 +192,7 @@
 
     } catch (error) {
       console.error('Fetch error:', error);
-      loadingMessage.innerText = "Error: I couldn't connect to my server. Please try again in a few seconds.";
+      loadingMessage.innerText = "Error: Couldn't connect to server. Please try again in a few seconds.";
     }
 
     // Auto-scroll to bottom
@@ -217,11 +207,10 @@
     if (isMarkdown && typeof marked !== 'undefined') {
       msgDiv.innerHTML = marked.parse(content);
     } else {
-      // Handle simple line breaks for initial non-markdown messages
-      if(typeof content === 'string' && content.includes('<br>')){
-          msgDiv.innerHTML = content;
+      if (typeof content === 'string' && content.includes('<br>')) {
+        msgDiv.innerHTML = content;
       } else {
-          msgDiv.innerText = content;
+        msgDiv.innerText = content;
       }
     }
 
