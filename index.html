@@ -12,81 +12,90 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background-color: #fdfcfb; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    :root {
+      --primary: #14532d;
+      --primary-hover: #166534;
+      --accent: #22c55e;
+      --bg-page: #f8fafc;
+      --bg-chat: #ffffff;
+      --bg-bot-msg: #f1f5f9;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+    }
+
+    body { 
+      background-color: var(--bg-page); 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      min-height: 100vh;
+      color: var(--text-main);
+    }
     
-    .chat-container { width: 100%; max-width: 480px; height: 85vh; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden; border: 1px solid #e5e7eb; }
-    .chat-header { background: #14532d; color: white; padding: 16px; text-align: center; font-weight: bold; font-size: 1.1rem; }
+    .chat-container { width: 100%; max-width: 440px; height: 88vh; max-height: 800px; background: var(--bg-chat); border-radius: 20px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border); }
+    .chat-header { background: var(--primary); color: white; padding: 18px 20px; display: flex; align-items: center; gap: 12px; }
+    .header-avatar { width: 38px; height: 38px; background: rgba(255, 255, 255, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; backdrop-filter: blur(4px); }
+    .header-info h1 { font-size: 1.05rem; font-weight: 600; line-height: 1.2; }
+    .header-info p { font-size: 0.75rem; opacity: 0.85; margin-top: 2px; }
+
+    .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; background-color: #fafafa; scroll-behavior: smooth; }
+    .message { max-width: 88%; padding: 12px 16px; border-radius: 18px; font-size: 0.92rem; line-height: 1.5; word-wrap: break-word; box-shadow: var(--shadow-sm); }
+    .bot-message { background: var(--bg-bot-msg); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+    .user-message { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
     
-    .chat-box { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background-color: #f9fafb; }
-    .message { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 0.95rem; line-height: 1.4; word-wrap: break-word; }
-    .bot-message { background: #ffffff; color: #1f2937; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #e5e7eb; }
-    .user-message { background: #16a34a; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
-    
-    /* Styles for Markdown elements inside bot messages */
     .bot-message p { margin-bottom: 8px; }
     .bot-message p:last-child { margin-bottom: 0; }
-    .bot-message h3 { font-size: 1rem; margin-top: 10px; margin-bottom: 6px; color: #14532d; }
-    .bot-message ul { margin-left: 20px; margin-bottom: 8px; }
-    .bot-message a { color: #16a34a; font-weight: 600; text-decoration: underline; word-break: break-all; }
-    .bot-message a:hover { color: #14532d; }
+    .bot-message h3 { font-size: 0.95rem; margin-top: 10px; margin-bottom: 6px; color: var(--primary); }
+    .bot-message ul { margin-left: 18px; margin-bottom: 8px; }
+    .bot-message a { color: var(--primary); font-weight: 600; text-decoration: underline; word-break: break-all; }
+    .bot-message a:hover { opacity: 0.8; }
 
-    /* Suggested Questions Area */
-    .suggestions-container {
-      padding: 10px 12px;
-      background: #ffffff;
-      border-top: 1px solid #e2e8f0;
-    }
-    .suggestions-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #64748b;
-      margin-bottom: 8px;
-    }
-    .suggestions-grid {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      scrollbar-width: thin;
-    }
-    .suggestion-chip {
-      background: #ffffff;
-      border: 1px solid #14532d;
-      border-radius: 16px;
-      padding: 6px 12px;
-      font-size: 0.8rem;
-      color: #14532d;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .suggestion-chip:hover {
-      background: #14532d;
-      color: #ffffff;
-      border-color: #14532d;
-    }
+    .suggestions-container { padding: 12px 16px; background: var(--bg-chat); border-top: 1px solid var(--border); }
+    .suggestions-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 0.5px; }
+    .suggestions-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+    .suggestions-grid::-webkit-scrollbar { display: none; }
+    .suggestion-chip { background: #f8fafc; border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 0.8rem; color: var(--text-main); white-space: nowrap; cursor: pointer; transition: all 0.2s ease; font-weight: 500; }
+    .suggestion-chip:hover { background: var(--primary); color: #ffffff; border-color: var(--primary); transform: translateY(-1px); }
 
-    .input-area { display: flex; padding: 12px; border-top: 1px solid #e5e7eb; gap: 8px; background: #fff; }
-    input { flex: 1; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; outline: none; }
-    input:focus { border-color: #16a34a; }
-    button { padding: 10px 16px; background: #14532d; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-    button:hover { background: #16a34a; }
+    .input-area { display: flex; padding: 12px 16px 16px; border-top: 1px solid var(--border); gap: 8px; background: var(--bg-chat); }
+    input { flex: 1; padding: 12px 16px; border: 1px solid var(--border); border-radius: 24px; outline: none; font-size: 0.92rem; background: #f8fafc; transition: all 0.2s ease; }
+    input:focus { border-color: var(--primary); background: #ffffff; box-shadow: 0 0 0 3px rgba(20, 83, 45, 0.1); }
+    button.send-btn { width: 42px; height: 42px; background: var(--primary); color: white; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0; }
+    button.send-btn:hover { background: var(--primary-hover); transform: scale(1.05); }
+    button.send-btn svg { width: 18px; height: 18px; fill: currentColor; }
   </style>
 </head>
 <body>
 
 <div class="chat-container">
-  <div class="chat-header">🌲 Greenie</div>
+  <div class="chat-header">
+    <div class="header-avatar">🌲</div>
+    <div class="header-info">
+      <h1>Greenie</h1>
+      <p>Greenburgh Town Assistant</p>
+    </div>
+  </div>
   
-  <<div class="message bot-message">👋 Hey there! I’m Greenie, your AI assistant for the Town of Greenburgh!
-
-I’m here to help you quickly find information about town services, garbage and recycling, local laws and rules, departments, events, and more.
-
-How can I help you today?
-
-A quick note: I’m an automated AI assistant, not a Town employee. My responses are meant to provide general guidance and may not always be completely accurate or up to date. For official information, legal matters, formal filings, or public records, please contact the Town of Greenburgh directly. For emergencies, call 911.</div>
+  <div class="chat-box" id="chatBox">
+    <!-- Updated opening message -->
+    <div class="message bot-message">
+      <p><strong>👋 Hey there! I’m Greenie, your AI assistant for the Town of Greenburgh!</strong></p>
+      <p>I’m here to help you quickly find information about town services, garbage and recycling, local laws and rules, departments, events, and more.</p>
+      <p>How can I help you today?</p>
+      <p><small style="color: var(--text-muted); display: block; margin-top: 10px; font-size: 0.8rem; line-height: 1.4;">
+        A quick note: I’m an automated AI assistant, not a Town employee. My responses are meant to provide general guidance and may not always be completely accurate or up to date. For official information, legal matters, formal filings, or public records, please contact the Town of Greenburgh directly. For emergencies, call 911.
+      </small></p>
+    </div>
   </div>
 
   <!-- Suggested Sample Questions Container -->
@@ -104,15 +113,17 @@ A quick note: I’m an automated AI assistant, not a Town employee. My responses
 
   <div class="input-area">
     <input type="text" id="userInput" placeholder="Ask Greenie a question..." onkeydown="if(event.key==='Enter') sendMessage()" />
-    <button onclick="sendMessage()">Send</button>
+    <button class="send-btn" onclick="sendMessage()" aria-label="Send message">
+      <svg viewBox="0 0 24 24">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+      </svg>
+    </button>
   </div>
 </div>
 
 <script>
-  // YOUR LIVE RENDER BACKEND URL
   const API_URL = 'https://greenburgh-rag-backend.onrender.com/api/chat';
 
-  // Configure Marked if available
   if (typeof marked !== 'undefined') {
     const renderer = new marked.Renderer();
     renderer.link = function(href, title, text) {
@@ -136,11 +147,9 @@ A quick note: I’m an automated AI assistant, not a Town employee. My responses
 
     if (!userText) return;
 
-    // Display User Message
     appendMessage(userText, 'user-message', false);
     inputField.value = '';
 
-    // Display Temporary "Thinking..." Message
     const loadingMessage = appendMessage('Thinking...', 'bot-message', false);
 
     try {
@@ -155,7 +164,6 @@ A quick note: I’m an automated AI assistant, not a Town employee. My responses
       const data = await response.json();
       const rawAnswer = data.answer || "No response received";
       
-      // Render formatted HTML or fallback to plain text
       if (typeof marked !== 'undefined') {
         loadingMessage.innerHTML = marked.parse(rawAnswer);
       } else {
@@ -167,7 +175,6 @@ A quick note: I’m an automated AI assistant, not a Town employee. My responses
       loadingMessage.innerText = "Error: Couldn't connect to server. Please try again in a few seconds.";
     }
 
-    // Auto-scroll to bottom
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 
